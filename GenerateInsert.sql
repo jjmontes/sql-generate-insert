@@ -149,7 +149,7 @@ SET @ValuesSql = N'VALUES (';
 DECLARE @SelectSql nvarchar(max);
 SET @SelectSql = N'SELECT ';
 DECLARE @TableData table (TableRow nvarchar(max));
-DECLARE @Results table (TableRow nvarchar(max));
+DECLARE @Results table (Idx BIGINT IDENTITY(1,1), TableRow nvarchar(max));
 DECLARE @TableRow nvarchar(max);
 DECLARE @RowNo int;
 DECLARE @HasIdentityColumn bit;
@@ -510,6 +510,7 @@ BEGIN
   DECLARE ResultsCursor CURSOR LOCAL FAST_FORWARD FOR
   SELECT TableRow
   FROM @Results
+  ORDER BY Idx
   FOR READ ONLY
   ;
   OPEN ResultsCursor;
@@ -550,7 +551,8 @@ BEGIN
   DEALLOCATE ResultsCursor;
 END ELSE BEGIN
   SELECT *
-  FROM @Results;
+  FROM @Results
+  ORDER BY Idx;
 END
 
 END
